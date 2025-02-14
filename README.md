@@ -1,2 +1,2 @@
-# ECTD
-Demo Repo for ECTD Application
+# Modernize-Angular-pro
+Modernize Angular Admin Dashboard
