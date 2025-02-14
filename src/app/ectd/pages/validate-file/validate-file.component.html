@@ -1,0 +1,12 @@
+<h2>File Validation</h2>
+
+<label for="fileInputInfo" class="info flex-grow-1 d-flex flex-column justify-content-left align-items-left">*Upload your file wants to validate:</label>
+<form [formGroup]="fileForm" (ngSubmit)="onSubmit()">
+    <label for="fileInput">Choose a file:</label>
+    <input type="file" id="fileInput" (change)="onFileSelected($event)" />
+    <button type="submit" [disabled]="!selectedFile || submitted">Validate File</button>
+
+    <div #textArea contenteditable="false" class="textarea-style textarea_container">
+    </div>
+
+</form>
