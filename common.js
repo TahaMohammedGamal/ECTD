@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkMatdash=self.webpackChunkMatdash||[]).push([[76],{3176:(r,s,a)=>{a.d(s,{$:()=>e});var c=a(4438);let e=(()=>{class t{static{this.\u0275fac=function(n){return new(n||t)}}static{this.\u0275prov=c.jDH({token:t,factory:t.\u0275fac,providedIn:"root"})}}return t})()}}]);
