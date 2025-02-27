@@ -13,6 +13,10 @@ export const Configuration = {
         FileValidationManagement: {
             ValidateFile: 'api/FileValidationManagement/ValidateFile'
         },
+        LookupManagement:{
+            GetModuleList:'api/LookupManagement/GetModuleList',
+            GetModuleItemList:'api/LookupManagement/GetModuleItemList'
+        },
         ChatGPT:{
             getChatGPTResult:'api/ChatGPT/GetChatGPTResult'
         },

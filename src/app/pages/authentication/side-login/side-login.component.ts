@@ -16,6 +16,9 @@ import { DataResponse, UserResponseModel } from 'src/app/ectd/domain/usecases/re
 import { LoginUsecase } from 'src/app/ectd/domain/usecases/login.usecase';
 import { AuthService } from 'src/app/services/auth-services';
 import { Configuration } from 'src/app/core/configurations/shared.config';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-side-login',
@@ -25,8 +28,10 @@ import { Configuration } from 'src/app/core/configurations/shared.config';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    MatButtonModule
+    MatButtonModule,
+    ToastrModule
   ],
+  providers: [ToastrService],
   templateUrl: './side-login.component.html',
 })
 export class AppSideLoginComponent {
@@ -38,6 +43,7 @@ export class AppSideLoginComponent {
     private formBuilder: FormBuilder,
     private loginUsecase:LoginUsecase,
     private authService:AuthService,
+    private toastrService: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -63,10 +69,10 @@ export class AppSideLoginComponent {
         if (res) {
           this.authService.saveLoginedUser(res);
             this.navigateToValidate();
-        } 
+        }
       },
         (err:any) => {
-          //this._toastrService.error(JSON.stringify(err));
+          this.toastrService.error('Email or Password are not correct');
         });
     }
   }

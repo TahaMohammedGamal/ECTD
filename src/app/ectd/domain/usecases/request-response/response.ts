@@ -34,3 +34,14 @@ export interface outputModel{
     runId:string;
     thread:string;
 }
+
+export interface ModuleList{
+    id:number
+    name:string
+}
+
+export interface ModuleItemsList{
+    id:number
+    name:string
+    moduleId:number
+}
