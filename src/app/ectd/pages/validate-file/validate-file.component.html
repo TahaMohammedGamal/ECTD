@@ -1,12 +1,49 @@
+<mat-card class="cardWithShadow theme-card">
+<mat-card-content class="b-t-1">
 <h2>File Validation</h2>
 
-<label for="fileInputInfo" class="info flex-grow-1 d-flex flex-column justify-content-left align-items-left">*Upload your file wants to validate:</label>
+<div class="row">
+    <div class="col-lg-6">
+      <mat-label class="f-w-600 m-b-8 d-block">Module</mat-label>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-select [(value)]="selectedModule" [disabled]="true">
+          @for(option of modules; track option.id) {
+          <mat-option [value]="option.id">{{
+            option.name
+          }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-lg-6">
+      <mat-label class="f-w-600 m-b-8 d-block">Item</mat-label>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-select [(value)]="selectedItem">
+          @for(option of moduleItems; track option.id) {
+          <mat-option [value]="option.id">{{
+            option.name
+          }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+</div>
+<!-- <select [(ngModel)]="selectedModule">
+    <option *ngFor="let item of modules" [value]="item.id">
+      {{ item.name }}
+    </option>
+  </select> -->
+<label for="fileInputInfo" 
+class="info flex-grow-1 d-flex flex-column justify-content-left align-items-left">
+*Upload your file wants to validate:</label>
 <form [formGroup]="fileForm" (ngSubmit)="onSubmit()">
     <label for="fileInput">Choose a file:</label>
     <input type="file" id="fileInput" (change)="onFileSelected($event)" />
     <button type="submit" [disabled]="!selectedFile || submitted">Validate File</button>
 
-    <div #textArea contenteditable="false" class="textarea-style textarea_container">
+    <div #textArea [innerHTML]="convertedHtml" contenteditable="false" class="textarea-style textarea_container">
     </div>
 
 </form>
+</mat-card-content>
+</mat-card>

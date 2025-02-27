@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
+import { AuthGuard } from './core/guard/auth.guard';
 
 export const routes: Routes = [
 
@@ -15,6 +16,7 @@ export const routes: Routes = [
        },
       {
         path: 'ectd',
+        canActivate: [AuthGuard],
         loadComponent: () =>
           import('./ectd/pages/dashboard/ectd-dashboard.component').then(m => m.ECTDDashboardComponent),
        },

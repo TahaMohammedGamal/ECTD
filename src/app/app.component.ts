@@ -10,4 +10,9 @@ import { NavigationStart, Router, RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'ECTD';
+
+constructor(){
+  
+}
+
 }

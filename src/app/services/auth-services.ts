@@ -19,9 +19,17 @@ export class AuthService {
     localStorage.setItem(Configuration.localStorageKeys.token, userData.token);
   }
 
-  logout(): void {
-    this.loggedOut.next();
-    this.storageService.clear();
+  isAuthenticated() {
+    return this.getToken() != null;
+  }
+
+  getToken() {
+    return localStorage.getItem(Configuration.localStorageKeys.token);
+  }
+
+  logout() {
+    localStorage.removeItem(Configuration.localStorageKeys.token)
+    localStorage.removeItem(Configuration.localStorageKeys.userData)
   }
 
 }

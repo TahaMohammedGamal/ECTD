@@ -5,14 +5,25 @@ import { ValidateUsecase } from '../../domain/usecases/validate.usecase';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import * as marked from 'marked';
 import { MarkdownModule } from 'ngx-markdown';
-
-
-
+import { ModuleLookupUsecase } from '../../domain/usecases/module-lookup.usecase';
+import { ModuleItemsList, ModuleList } from '../../domain/usecases/request-response/response';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCardModule } from '@angular/material/card';
+import { ModuleItemsLookupUsecase } from '../../domain/usecases/module-items-lookup.usecase';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-validate-file',
   standalone:true,
-  imports:[RouterModule,FormsModule,ReactiveFormsModule,MarkdownModule],
+  imports:[RouterModule,FormsModule,ReactiveFormsModule,MarkdownModule
+    ,CommonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    ToastrModule],
+      providers: [ToastrService],
   templateUrl: './validate-file.component.html',
   styleUrl: './validate-file.component.scss',
 })
@@ -23,17 +34,19 @@ export class ValidateFileComponent implements OnInit  {
   selectedFile: File | null = null;
   textareaField:AbstractControl;
   submitted:boolean=false;
-  markdownContent = `
-      | Header 1 | Header 2 |
-      |----------|----------|
-      | Row 1    | Data 1   |
-      | Row 2    | Data 2   |
-    `;
+  modules:ModuleList[]=[];
+  moduleItems:ModuleItemsList[]=[];
+  selectedModule:number;
+  selectedItem:number;
+  convertedHtml : SafeHtml
 
   constructor(
     private fb: FormBuilder,
     private validateUsecase:ValidateUsecase,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private moduleLookupUsecase: ModuleLookupUsecase,
+    private moduleItemsLookupUsecase:ModuleItemsLookupUsecase,
+    private toastrService: ToastrService
   ) {
     
   }
@@ -43,7 +56,26 @@ export class ValidateFileComponent implements OnInit  {
     });
 
     this.textareaField=this.fileForm.controls['textareaField'];
+    this.getModuleList();
+    this.getModuleItemsList();
+  }
 
+  getModuleList(){
+    this.moduleLookupUsecase.excute().subscribe((data) => {
+      this.modules = data;
+      this.selectedModule = this.modules[2].id;
+    },
+    (error) => {
+      console.error('Error fetching dropdown data:', error);
+    });
+  }
+  getModuleItemsList(){
+    this.moduleItemsLookupUsecase.excute().subscribe((data) => {
+      this.moduleItems = data;
+    },
+    (error) => {
+      console.error('Error fetching dropdown data:', error);
+    });
   }
 
   onFileSelected(event: Event): void {
@@ -60,21 +92,19 @@ export class ValidateFileComponent implements OnInit  {
       this.submitted=true;
       const formData = new FormData();
       formData.append('file', this.selectedFile);
+      formData.append('itemID', this.selectedItem.toString());
       this.validateUsecase.excute(formData).subscribe(res=>{
         const unsafeString = res;
         this.submitted=false;
         res.analysis.forEach(async (re, index) => {
-          this.textAreaDiv.nativeElement.innerHTML = this.sanitizer.bypassSecurityTrustHtml(await marked.parse(re.output));
+          this.convertedHtml=this.sanitizer.bypassSecurityTrustHtml(await marked.parse(re.output));
         });
-      })
+      },
+      (err:any)=>{
+        this.toastrService.error('Something went wrong , please contact support');
+      }
+    
+    )
     }
-  }
-
-  getFormattedText(text:string) {
-    return text
-      .replace(/### (.*)/g, '<h3>$1</h3>') // Replace ### with <h3>
-      .replace(/#### (.*)/g, '<h4>$1</h4>') // Replace #### with <h4>
-      .replace(/---/g, '<hr>') // Replace --- with <hr>
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // Replace ** with <strong>
   }
 }

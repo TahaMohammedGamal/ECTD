@@ -29,6 +29,8 @@ import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BaseUrlHandlerInterceptor } from './core/interceptors/base-url-handler.interceptor';
 import { MarkdownModule, provideMarkdown} from 'ngx-markdown';
+import { ToastrModule, ToastNoAnimationModule } from 'ngx-toastr';
+import { AuthGuard } from './core/guard/auth.guard';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -37,6 +39,7 @@ export const appConfig: ApplicationConfig = {
       useClass: BaseUrlHandlerInterceptor,
       multi: true,
     },
+    AuthGuard,
     provideHttpClient(),  // Required for fetching external markdown files
     provideMarkdown(),     // Provides Markdown support
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -58,7 +61,9 @@ export const appConfig: ApplicationConfig = {
       MaterialModule,
       TablerIconsModule.pick(TablerIcons),
       NgScrollbarModule,
-      MarkdownModule.forRoot()
+      MarkdownModule.forRoot(),
+      ToastrModule.forRoot(),
+      ToastNoAnimationModule
     ),
   ],
 };
