@@ -22,6 +22,7 @@ export const routes: Routes = [
        },
        {
         path: 'ectd/validate',
+        canActivate: [AuthGuard],
         loadComponent: () =>
           import('./ectd/pages/validate-file/validate-file.component').then(m => m.ValidateFileComponent),
        },
