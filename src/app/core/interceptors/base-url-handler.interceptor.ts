@@ -34,7 +34,8 @@ export class BaseUrlHandlerInterceptor implements HttpInterceptor {
                     {   
                     url: fileManagementAPIUrl + req.url,
                     setHeaders: {
-                        AuthorizationHeader: `${token}`
+                        // AuthorizationHeader: `${token}`
+                        ...(token !== null && { AuthorizationHeader: `${token}` })
                       }
                 }
             );
