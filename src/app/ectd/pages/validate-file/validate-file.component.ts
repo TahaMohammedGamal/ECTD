@@ -14,7 +14,6 @@ import { MatCardModule } from '@angular/material/card';
 import { ModuleItemsLookupUsecase } from '../../domain/usecases/module-items-lookup.usecase';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { LoaderService } from '../../shared/components/loader/loader.service';
 
 @Component({
   selector: 'app-validate-file',
@@ -50,8 +49,7 @@ export class ValidateFileComponent implements OnInit  {
     private sanitizer: DomSanitizer,
     private moduleLookupUsecase: ModuleLookupUsecase,
     private moduleItemsLookupUsecase:ModuleItemsLookupUsecase,
-    private toastrService: ToastrService,
-    private loaderService: LoaderService
+    private toastrService: ToastrService
   ) {
     
   }
@@ -94,8 +92,7 @@ export class ValidateFileComponent implements OnInit  {
 
   onSubmit(): void {
     if (this.selectedFile) {
-      this.isLoading= true;
-      //this.loaderService.show();
+      this.isLoading= true;      
       this.textAreaDiv.nativeElement.innerHTML='';
       this.submitted=true;
       const formData = new FormData();

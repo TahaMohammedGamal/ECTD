@@ -1,7 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, HostListener, Inject, OnInit } from '@angular/core';
 import { NavigationStart, Router, RouterOutlet } from '@angular/router';
-import { LoaderComponent } from './ectd/shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-root',
