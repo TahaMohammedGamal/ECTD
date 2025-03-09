@@ -13,6 +13,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { ModuleItemsLookupUsecase } from '../../domain/usecases/module-items-lookup.usecase';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { LoaderService } from '../../shared/components/loader/loader.service';
 
 @Component({
   selector: 'app-validate-file',
@@ -22,7 +24,8 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
     MatCardModule,
     MatFormFieldModule,
     MatSelectModule,
-    ToastrModule],
+    ToastrModule,
+    MatProgressSpinnerModule ],
       providers: [ToastrService],
   templateUrl: './validate-file.component.html',
   styleUrl: './validate-file.component.scss',
@@ -39,6 +42,7 @@ export class ValidateFileComponent implements OnInit  {
   selectedModule:number;
   selectedItem:number;
   convertedHtml : SafeHtml
+  isLoading:boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -46,7 +50,8 @@ export class ValidateFileComponent implements OnInit  {
     private sanitizer: DomSanitizer,
     private moduleLookupUsecase: ModuleLookupUsecase,
     private moduleItemsLookupUsecase:ModuleItemsLookupUsecase,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private loaderService: LoaderService
   ) {
     
   }
@@ -72,6 +77,7 @@ export class ValidateFileComponent implements OnInit  {
   getModuleItemsList(){
     this.moduleItemsLookupUsecase.excute().subscribe((data) => {
       this.moduleItems = data;
+      this.selectedItem = this.moduleItems[0].id;
     },
     (error) => {
       console.error('Error fetching dropdown data:', error);
@@ -88,6 +94,8 @@ export class ValidateFileComponent implements OnInit  {
 
   onSubmit(): void {
     if (this.selectedFile) {
+      this.isLoading= true;
+      //this.loaderService.show();
       this.textAreaDiv.nativeElement.innerHTML='';
       this.submitted=true;
       const formData = new FormData();
@@ -98,10 +106,12 @@ export class ValidateFileComponent implements OnInit  {
         this.submitted=false;
         res.analysis.forEach(async (re, index) => {
           this.convertedHtml=this.sanitizer.bypassSecurityTrustHtml(await marked.parse(re.output));
+          this.isLoading= false;
         });
       },
       (err:any)=>{
         this.toastrService.error('Something went wrong , please contact support');
+        this.isLoading= false;
       }
     
     )

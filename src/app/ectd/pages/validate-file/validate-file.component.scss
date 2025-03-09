@@ -92,5 +92,35 @@ textarea {
     font-weight: bold; /* Makes headers bold */
   }
   
+/* Overlay to cover the entire page */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1); /* Semi-transparent black */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's on top of everything */
+}
 
+/* Center the spinner */
+.spinner {
+  z-index: 1001; /* Ensure it's on top of the overlay */
+}
+
+/* Disable pointer events on the content when the spinner is active */
+.content.disabled {
+  pointer-events: none;
+  opacity: 0.5; /* Optional: Reduce opacity to indicate disabled state */
+}
  
+.loading-text {
+  color: rgb(7, 7, 7); /* Label color */
+  font-size: 1.2rem; /* Label font size */
+  margin-top: 16px; /* Space between spinner and label */
+  text-align: center;
+}
