@@ -10,6 +10,10 @@
   color: white;
 }
 
+.mat-mdc-unelevated-button.mat-primary{
+  --mdc-filled-button-container-color:#0057A8 !important;
+}
+
 .mat-mdc-raised-button {
   box-shadow: $cardshadow;
 }
