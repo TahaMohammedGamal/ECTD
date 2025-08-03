@@ -99,19 +99,50 @@ export class ValidateFileComponent implements OnInit  {
       formData.append('file', this.selectedFile);
       formData.append('itemID', this.selectedItem.toString());
       this.validateUsecase.excute(formData).subscribe(res=>{
-        const unsafeString = res;
-        this.submitted=false;
-        res.analysis.forEach(async (re, index) => {
-          this.convertedHtml=this.sanitizer.bypassSecurityTrustHtml(await marked.parse(re.output));
-          this.isLoading= false;
-        });
+        this.submitted = false;
+
+        if (res.analysis) {
+          this.handleAnalysis(res.analysis);
+        } else {
+            Promise.resolve(marked.parse(res.error)).then((parsedHtml) => {
+            this.convertedHtml = this.sanitizer.bypassSecurityTrustHtml(parsedHtml);
+            this.isLoading = false;
+          });
+        }
       },
-      (err:any)=>{
-        this.toastrService.error('Something went wrong , please contact support');
-        this.isLoading= false;
+      (err: any) => {
+        this.toastrService.error('Something went wrong, please contact support');
+        this.isLoading = false;
       }
+      //   const unsafeString = res;
+      //   this.submitted=false;
+      //   if(res.analysis){
+      //     res.analysis.forEach(async (re, index) => {
+      //     this.convertedHtml=this.sanitizer.bypassSecurityTrustHtml(await marked.parse(re.output));
+      //     this.isLoading= false;
+      //   });
+      //   }
+      //   else{
+      //     const parsedHtml =  marked.parse(res.error); // make sure this is in an async function
+      //     this.convertedHtml = this.sanitizer.bypassSecurityTrustHtml(parsedHtml);
+      //     this.isLoading = false;
+      //   }
+      // },
+      // (err:any)=>{
+      //   this.toastrService.error('Something went wrong , please contact support');
+      //   this.isLoading= false;
+      // }
     
     )
     }
   }
+  async handleAnalysis(analysisArray: any[]): Promise<void> {
+  for (const re of analysisArray) {
+    const parsedHtml = await marked.parse(re.output);
+    this.convertedHtml = this.sanitizer.bypassSecurityTrustHtml(parsedHtml);
+    // Consider appending instead of overwriting if multiple outputs
+    // this.textAreaDiv.nativeElement.innerHTML += parsedHtml;
+  }
+  this.isLoading = false;
+}
 }

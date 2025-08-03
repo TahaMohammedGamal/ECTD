@@ -27,6 +27,7 @@ export interface UserModel {
 export interface FileValidationModel{
     analysis:outputModel[];
     finalSummary:string;
+    error:string;
 }
 
 export interface outputModel{
