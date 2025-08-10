@@ -14,6 +14,7 @@ import { MatCardModule } from '@angular/material/card';
 import { ModuleItemsLookupUsecase } from '../../domain/usecases/module-items-lookup.usecase';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-validate-file',
@@ -24,6 +25,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatFormFieldModule,
     MatSelectModule,
     ToastrModule,
+    MatButtonModule,
     MatProgressSpinnerModule ],
       providers: [ToastrService],
   templateUrl: './validate-file.component.html',
